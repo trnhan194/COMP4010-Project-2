@@ -1,0 +1,76 @@
+---
+title: "MTCars Interactive Dashboard"
+author: "Nguyen Trong Nhan"
+format: html
+editor: visual
+runtime: shiny_prerendered
+---
+
+## MTCars Interactive Dashboard
+
+This interactive dashboard allows you to explore the `mtcars` dataset. You can select different variables for the X and Y axes, color the points by another variable, and filter the data by the number of cylinders.
+
+```{r setup, include=FALSE}
+library(shiny)
+library(ggplot2)
+library(dplyr)
+```
+
+```{r}
+ui <- fluidPage(
+  titlePanel("MTCars Interactive Dashboard"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      selectInput("xvar", "X-axis variable", choices = names(mtcars)),
+      selectInput("yvar", "Y-axis variable", choices = names(mtcars), selected = "mpg"),
+      selectInput("colorvar", "Color by", choices = c("None", names(mtcars))),
+      sliderInput("cylinders", "Number of cylinders", min(mtcars$cyl), max(mtcars$cyl),
+                  value = c(min(mtcars$cyl), max(mtcars$cyl)), step = 1),
+      hr(),
+      h3("Variable Descriptions:"),
+      p("mpg: Miles/(US) gallon"),
+      p("cyl: Number of cylinders"),
+      p("disp: Displacement (cu.in.)"),
+      p("hp: Gross horsepower"),
+      p("drat: Rear axle ratio"),
+      p("wt: Weight (1000 lbs)"),
+      p("qsec: 1/4 mile time"),
+      p("vs: Engine (0 = V-shaped, 1 = straight)"),
+      p("am: Transmission (0 = automatic, 1 = manual)"),
+      p("gear: Number of forward gears"),
+      p("carb: Number of carburetors")
+    ),
+    
+    mainPanel(
+      plotOutput("scatterPlot")
+    )
+  )
+)
+```
+
+```{r}
+server <- function(input, output) {
+  filteredData <- reactive({
+    mtcars %>%
+      filter(cyl >= input$cylinders[1] & cyl <= input$cylinders[2])
+  })
+  
+  output$scatterPlot <- renderPlot({
+    p <- ggplot(filteredData(), aes_string(x = input$xvar, y = input$yvar))
+    
+    if (input$colorvar != "None") {
+      p <- p + aes_string(color = input$colorvar)
+    }
+    
+    p + geom_point() + theme_minimal()
+  })
+}
+```
+
+```{r}
+shinyApp(ui = ui, server = server)
+```
+
+
+This QMD file sets up an interactive Shiny dashboard using the `mtcars` dataset. It includes descriptions of each variable directly in the UI for reference. The sidebar allows for variable selection and data filtering, while the main panel displays the resulting plot. To view the dashboard, click Run All in RStudio. 

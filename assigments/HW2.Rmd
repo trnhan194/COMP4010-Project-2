@@ -1,0 +1,195 @@
+---
+title: "Principles of Accessible Data Visualization"
+output: html_document
+---
+
+# Quizzes
+
+## Quiz 1: Color Accessibility
+
+1. Why is it important to avoid red/green reliance in data visualizations?
+   - A. It is more visually appealing
+   - B. To accommodate color blindness
+   - C. It is a trendy design choice
+   - D. To save printing costs
+
+2. What can be used in addition to color to differentiate elements in a visualization?
+   - A. Fonts and text size
+   - B. Patterns, textures, or shapes
+   - C. Sounds
+   - D. Animation effects
+
+## Quiz 2: User-Centered Approach
+
+1. Why should you conduct research about your audience before creating a visualization?
+   - A. To make the visualization look professional
+   - B. To understand their needs and abilities
+   - C. To decide on the color scheme
+   - D. To impress stakeholders
+
+2. What is the purpose of usability testing?
+   - A. To test the performance of the software
+   - B. To gather feedback from people with disabilities
+   - C. To find bugs in the code
+   - D. To finalize the design without user input
+
+## Quiz 3: Visual Clarity and Simplicity
+
+1. How should you declutter your design?
+   - A. Use bright colors
+   - B. Prioritize key information
+   - C. Add more charts
+   - D. Increase font size
+
+2. What should you consider when choosing the right chart type?
+   - A. The data and audience understanding
+   - B. The colors available
+   - C. The amount of text
+   - D. The latest design trends
+
+## Quiz 4: Beyond Vision
+
+1. What is the purpose of audio descriptions in data visualization?
+   - A. To provide a soundtrack
+   - B. To explain the data for visually impaired users
+   - C. To add more detail to the visualization
+   - D. To make the visualization more engaging
+
+2. Why is screen reader compatibility important?
+   - A. To enhance visual appeal
+   - B. To ensure text elements are accessible to screen readers
+   - C. To improve performance
+   - D. To follow design trends
+
+## Quiz 5: Cultural Sensitivity and Collaboration
+
+1. Why should cultural symbols and representations be considered in data visualizations?
+   - A. To make the visualization colorful
+   - B. To avoid stereotypes and biases
+   - C. To include as many symbols as possible
+   - D. To save space
+
+2. How can you promote standards and policies for accessibility in data visualization?
+   - A. By designing in isolation
+   - B. By advocating for change
+   - C. By avoiding feedback
+   - D. By focusing on aesthetics only
+   
+## Answers
+Quiz 1: Color Accessibility
+
+1. Why is it important to avoid red/green reliance in data visualizations?
+   - **B. To accommodate color blindness**
+
+2. What can be used in addition to color to differentiate elements in a visualization?
+   - **B. Patterns, textures, or shapes**
+
+Quiz 2: User-Centered Approach
+
+1. Why should you conduct research about your audience before creating a visualization?
+   - **B. To understand their needs and abilities**
+
+2. What is the purpose of usability testing?
+   - **B. To gather feedback from people with disabilities**
+
+Quiz 3: Visual Clarity and Simplicity
+
+1. How should you declutter your design?
+   - **B. Prioritize key information**
+
+2. What should you consider when choosing the right chart type?
+   - **A. The data and audience understanding**
+
+Quiz 4: Beyond Vision
+
+1. What is the purpose of audio descriptions in data visualization?
+   - **B. To explain the data for visually impaired users**
+
+2. Why is screen reader compatibility important?
+   - **B. To ensure text elements are accessible to screen readers**
+
+Quiz 5: Cultural Sensitivity and Collaboration
+
+1. Why should cultural symbols and representations be considered in data visualizations?
+   - **B. To avoid stereotypes and biases**
+
+2. How can you promote standards and policies for accessibility in data visualization?
+   - **B. By advocating for change**
+
+# R Code Examples
+## High Contrast and Color Accessibility
+```{r}
+# Load necessary library
+library(ggplot2)
+
+# Sample data
+data <- data.frame(
+  category = c("A", "B", "C", "D"),
+  values = c(3, 12, 5, 18)
+)
+
+# Bar plot with high contrast colors
+ggplot(data, aes(x = category, y = values, fill = category)) +
+  geom_bar(stat = "identity") +
+  scale_fill_manual(values = c("A" = "#1b9e77", "B" = "#d95f02", "C" = "#7570b3", "D" = "#e7298a")) +
+  theme_minimal() +
+  theme(text = element_text(size = 14)) +  # Readable fonts
+  labs(title = "High Contrast Bar Plot",
+       x = "Category",
+       y = "Values",
+       fill = "Category") +
+  theme(legend.position = "none")
+```
+
+
+## Clear Labeling and Choosing the Right Chart Type
+
+```{r}
+# Sample data
+data2 <- data.frame(
+  category = c("A", "B", "C", "D"),
+  values = c(3, 12, 5, 18)
+)
+
+# Pie chart
+ggplot(data2, aes(x = "", y = values, fill = category)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar(theta = "y") +
+  scale_fill_manual(values = c("A" = "#1b9e77", "B" = "#d95f02", "C" = "#7570b3", "D" = "#e7298a")) +
+  theme_void() +
+  theme(text = element_text(size = 14)) +  # Readable fonts
+  labs(title = "Pie Chart with Clear Labels",
+       fill = "Category")
+```
+
+
+## Patterns, Textures, or Shapes for Differentiation
+```{r}
+# Load necessary libraries
+library(ggplot2)
+library(ggpattern)
+
+# Sample data
+data3 <- data.frame(
+  category = c("A", "B", "C", "D"),
+  values = c(3, 12, 5, 18)
+)
+
+# Bar plot with patterns
+ggplot(data3, aes(x = category, y = values, pattern = category)) +
+  geom_bar_pattern(stat = "identity", fill = "white", 
+                   pattern_fill = c("#1b9e77", "#d95f02", "#7570b3", "#e7298a"), 
+                   pattern_density = 0.1, pattern_angle = 45, 
+                   pattern_spacing = 0.02) +
+  theme_minimal() +
+  theme(text = element_text(size = 14)) +  # Readable fonts
+  labs(title = "Bar Plot with Patterns",
+       x = "Category",
+       y = "Values",
+       pattern = "Category") +
+  theme(legend.position = "none")
+```
+
+
+
+

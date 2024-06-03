@@ -1,0 +1,107 @@
+In this homework, we learn how to create some of the most common visualizations using the `ggplot2` library with the Iris dataset. 
+
+---
+title: "Common Visualizations with ggplot2 using the Iris Dataset"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(datasets)
+```
+
+# Introduction
+
+In this document, we will explore the Iris dataset using the `ggplot2` package in R. The Iris dataset contains measurements of sepal length, sepal width, petal length, and petal width for 150 iris flowers from three different species.
+
+# Load the Data
+
+We will start by loading the Iris dataset and taking a quick look at its structure.
+
+```{r load-data}
+data(iris)
+head(iris)
+```
+
+# Scatter Plot
+
+A scatter plot is useful for visualizing the relationship between two continuous variables. We will create a scatter plot of Sepal.Length vs. Sepal.Width.
+
+```{r scatter-plot}
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
+  geom_point() +
+  labs(title = "Scatter Plot of Sepal Length vs Sepal Width",
+       x = "Sepal Length",
+       y = "Sepal Width")
+```
+
+# Scatter Plot with Color by Species
+
+Adding color to the scatter plot can help differentiate between the species.
+
+```{r scatter-plot-color}
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+  geom_point() +
+  labs(title = "Scatter Plot of Sepal Length vs Sepal Width by Species",
+       x = "Sepal Length",
+       y = "Sepal Width")
+```
+
+# Histogram
+
+A histogram is useful for understanding the distribution of a single continuous variable. We will create a histogram of Sepal.Length.
+
+```{r histogram}
+ggplot(iris, aes(x = Sepal.Length)) +
+  geom_histogram(binwidth = 0.5, fill = "blue", color = "black") +
+  labs(title = "Histogram of Sepal Length",
+       x = "Sepal Length",
+       y = "Frequency")
+```
+
+# Box Plot
+
+A box plot is useful for comparing the distribution of a continuous variable across different levels of a categorical variable. We will create a box plot of Sepal.Length for each species.
+
+```{r box-plot}
+ggplot(iris, aes(x = Species, y = Sepal.Length)) +
+  geom_boxplot() +
+  labs(title = "Box Plot of Sepal Length by Species",
+       x = "Species",
+       y = "Sepal Length")
+```
+
+# Violin Plot
+
+A violin plot combines aspects of a box plot and a kernel density plot. It is useful for comparing the distribution of a continuous variable across different levels of a categorical variable.
+
+```{r violin-plot}
+ggplot(iris, aes(x = Species, y = Sepal.Length)) +
+  geom_violin() +
+  labs(title = "Violin Plot of Sepal Length by Species",
+       x = "Species",
+       y = "Sepal Length")
+```
+
+# Pair Plot
+
+A pair plot (or scatterplot matrix) is useful for visualizing the pairwise relationships between multiple variables. We will use the `GGally` package to create a pair plot of the Iris dataset.
+
+```{r pair-plot, warning=FALSE, message=FALSE}
+library(GGally)
+ggpairs(iris, aes(color = Species), 
+        lower = list(continuous = wrap("points", alpha = 0.7, size = 1.5)),
+        upper = list(continuous = wrap("cor", size = 3)),
+        diag = list(continuous = wrap("barDiag", size = 3))) +
+  theme(axis.text.x = element_text(hjust = 1, size = 5),
+        axis.text.y = element_text(size = 5)) +
+  labs(title = "Pair Plot of Iris Dataset")
+
+```
+
+# Conclusion
+
+In this document, we have created several common visualizations using the `ggplot2` package and the Iris dataset. These visualizations help in understanding the relationships between different variables and the distribution of individual variables within the dataset.
+
+This R Markdown file demonstrates how to create a scatter plot, scatter plot with color by species, histogram, box plot, violin plot, and pair plot using the `ggplot2` package with the Iris dataset. The explanations and code provided will help you understand how to use `ggplot2` for basic data visualization tasks.

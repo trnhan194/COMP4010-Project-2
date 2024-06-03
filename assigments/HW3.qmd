@@ -1,0 +1,170 @@
+This QMD (Quarto Markdown) file comprises scripts written in R using the ggplot2 library, designed to create and enhance visualizations with a focus on accessibility, color contrast, and interactive elements. Further information on Quarto can be found in the official documentation at this [link](https://quarto.org/docs/guide/).  
+
+# Color and Contrast
+This section focuses on creating visualizations with high contrast and color-blind friendly palettes. It introduces two different color palettes applied to bar charts representing simple categorical data. The first palette is specifically tailored for color-blind viewers, using distinct, easily discernible colors. The second palette provides an alternative scheme. The script emphasizes setting theme options in ggplot2 to enhance readability and visual appeal while removing unnecessary elements like legends to declutter the plot.
+
+```{r}
+# Load necessary libraries
+library(ggplot2)
+library(ggthemes)
+
+# Sample data
+data <- data.frame(
+  Category = c('A', 'B', 'C', 'D'),
+  Value = c(10, 20, 15, 25)
+)
+
+# High contrast and color-blind friendly palette
+color_blind_palette <- c('#0072B2', '#D55E00', '#F0E442', '#009E73')
+
+# Basic plot with high contrast
+ggplot(data, aes(x=Category, y=Value, fill=Category)) +
+  geom_bar(stat="identity") +
+  scale_fill_manual(values=color_blind_palette) +
+  theme_minimal(base_size = 15) +
+  theme(
+    text = element_text(color = "black"), # High contrast text
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.background = element_rect(fill = "white", color = NA),
+    legend.position = "none"
+  ) +
+  labs(title="High Contrast and Color-blind Friendly Palette",
+       x="Category",
+       y="Value")
+
+# Alternative color schemes
+alternative_palette <- c('#E69F00', '#56B4E9', '#009E73', '#F0E442')
+
+# Plot with alternative color scheme
+ggplot(data, aes(x=Category, y=Value, fill=Category)) +
+  geom_bar(stat="identity") +
+  scale_fill_manual(values=alternative_palette) +
+  theme_minimal(base_size = 15) +
+  theme(
+    text = element_text(color = "black"), # High contrast text
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.background = element_rect(fill = "white", color = NA),
+    legend.position = "none"
+  ) +
+  labs(title="Alternative Color Scheme",
+       x="Category",
+       y="Value")
+
+
+```
+
+# Text and Labels
+Here, the script extends the use of ggplot2 by defining a function to add descriptive alternative text, improving accessibility. The visualization uses a Set3 color palette for a bar chart and adjusts text attributes including font family, size, and style to ensure clarity and ease of reading. Subtitles and annotations add more context, making the information more comprehensive.
+
+```{r}
+# Load necessary library
+library(ggplot2)
+
+data <- data.frame(
+  Category = c('A', 'B', 'C', 'D'),
+  Value = c(10, 20, 15, 25)
+)
+
+# Define a function to add alternative text for accessibility
+add_alternative_text <- function(description) {
+  cat(description)
+}
+
+# Descriptive text for the chart
+alt_text <- "Bar chart showing values for categories A, B, C, and D. Category A has a value of 10, B has 20, C has 15, and D has 25."
+
+# Generate the plot
+ggplot(data, aes(x=Category, y=Value, fill=Category)) +
+  geom_bar(stat="identity") +
+  scale_fill_brewer(palette="Set3") +
+  theme_minimal(base_size = 15) + # Setting base font size to 15 for legibility
+  theme(
+    text = element_text(family = "sans", size = 12), # Sans-serif font, size 12
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5), # Larger title font
+    plot.subtitle = element_text(size = 14, hjust = 0.5), # Subtitle for additional context
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12),
+    legend.position = "none",
+    plot.margin = margin(10, 10, 10, 10), # Adequate spacing around the plot
+    panel.grid.major = element_blank(), # Avoiding clutter
+    panel.grid.minor = element_blank()
+  ) +
+  labs(
+    title = "Category Values",
+    subtitle = "A simple bar chart with clear and concise language, font size 12",
+    x = "Category",
+    y = "Value"
+  )
+
+```
+
+# Data Representation
+This part demonstrates both static and interactive plotting techniques. It uses monthly sales data to generate a line chart, highlighting important data points and trends, such as sales peaks. Annotations are used strategically to draw attention to specific areas of the chart. Additionally, the script integrates Plotly to convert a ggplot2 object into an interactive plot, enhancing user engagement through dynamic elements like tooltips and movable annotations.
+
+```{r}
+library(ggplot2)
+library(plotly)
+
+# Sample data: Monthly sales over a year
+data <- data.frame(
+  Month = factor(month.name, levels = month.name),
+  Sales = c(120, 150, 170, 130, 180, 220, 210, 190, 200, 230, 240, 250)
+)
+
+# Generate a static line plot with annotations
+static_plot <- ggplot(data, aes(x=Month, y=Sales, group=1)) +
+  geom_line(color="blue", size=1) +
+  geom_point(color="red", size=3) +
+  theme_minimal(base_size = 15) +
+  theme(
+    text = element_text(family = "sans", size = 12),
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12),
+    axis.text.x = element_text(angle = 90, hjust = 1), # Rotate months vertically
+    plot.margin = margin(10, 10, 10, 10)
+  ) +
+  labs(
+    title = "Monthly Sales Over a Year",
+    x = "Month",
+    y = "Sales"
+  ) +
+  annotate("text", x = 8, y = 220, label = "Sales peak in the last quarter", size = 5, color = "darkgreen")
+
+# Display the static plot
+print(static_plot)
+
+```
+
+```{r}
+# Generate an interactive plot using plotly
+interactive_plot <- ggplot(data, aes(x=Month, y=Sales, group=1, text=paste("Sales:", Sales))) +
+  geom_line(color="blue", size=1) +
+  geom_point(color="red", size=3) +
+  theme_minimal(base_size = 15) +
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1) # Rotate months vertically
+  ) +
+  labs(
+    title = "Interactive Monthly Sales Over a Year",
+    x = "Month",
+    y = "Sales"
+  )
+
+# Convert the ggplot object to a plotly object
+interactive_plotly <- ggplotly(interactive_plot, tooltip="text") %>%
+  layout(
+    annotations = list(
+      x = 8, y = 220, text = "Sales peak in the last quarter",
+      showarrow = TRUE, arrowhead = 2, ax = 20, ay = -30,
+      font = list(size = 12, color = "darkgreen")
+    )
+  )
+
+# Display the interactive plot
+interactive_plotly
+
+```
+
+
+
